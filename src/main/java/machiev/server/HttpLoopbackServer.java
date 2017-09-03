@@ -46,17 +46,17 @@ public class HttpLoopbackServer implements HttpServerAccess {
 
     @Override
     public synchronized HttpRequestData getResponse() {
-        while (!isResponse) {
-            try {
+        try {
+            while (!isResponse) {
                 wait();
-            } catch (InterruptedException e) {
-                System.out.println("Wait interrupted\n" + e);
             }
+            isResponse = false;
+            HttpRequestData requestRef = response;
+            response = null;
+            return requestRef;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        isResponse = false;
-        HttpRequestData requestRef = response;
-        response = null;
-        return requestRef;
     }
 
     private synchronized void setResponse(HttpRequestData response) {
@@ -76,7 +76,7 @@ public class HttpLoopbackServer implements HttpServerAccess {
             try {
                 exchange.sendResponseHeaders(204, -1L);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
 
@@ -97,7 +97,7 @@ public class HttpLoopbackServer implements HttpServerAccess {
                     }
                     bodyString = result.toString("UTF-8");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
             httpLoopbackServer.setResponse(new HttpRequestData(exchange.getRequestURI(), exchange.getRequestMethod(), bodyString));
