@@ -1,8 +1,8 @@
-package machiev.server;
+package machiev.httploopback.server;
 
-import machiev.data.HttpRequestData;
+import machiev.httploopback.data.HttpRequestData;
 
-public interface HttpServerAccess {
+public interface HttpServerAccess<T, RD extends HttpRequestData<T>> {
 
     /**
      * Stops HTTP server.
@@ -13,5 +13,5 @@ public interface HttpServerAccess {
      * Blocking method that waits for a response.
      * @return response sent after server handles a request.
      */
-    HttpRequestData getResponse();
+     RD getResponse();
 }

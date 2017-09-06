@@ -1,8 +1,8 @@
 package machiev;
 
-import machiev.data.HttpRequestData;
-import machiev.server.HttpLoopbackServer;
-import machiev.server.HttpServerAccess;
+import machiev.httploopback.data.HttpRequestData;
+import machiev.httploopback.server.HttpLoopbackServer;
+import machiev.httploopback.server.HttpServerAccess;
 
 import java.io.IOException;
 
@@ -14,6 +14,7 @@ public class Main {
 
         HttpRequestData response = httpServerManager.getResponse();
         System.out.println("Got response:\n" + response);
+        System.out.println("Got headers:\n" + response.getRequestHeaders().entrySet());
 
         response = httpServerManager.getResponse();
         System.out.println("Got response:\n" + response);

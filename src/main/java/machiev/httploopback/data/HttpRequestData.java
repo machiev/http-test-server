@@ -1,18 +1,23 @@
-package machiev.data;
+package machiev.httploopback.data;
+
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
 
 import java.net.URI;
 
 /**
  * Request data transfer object.
  */
-public class HttpRequestData {
+public class HttpRequestData<T> {
     private final URI uri;
     private final String httpMethod;
-    private final String body;
+    private final Headers requestHeaders;
+    private final T body;
 
-    public HttpRequestData(URI uri, String httpMethod, String body) {
-        this.uri = uri;
-        this.httpMethod = httpMethod;
+    public HttpRequestData(HttpExchange exchange, T body) {
+        this.uri = exchange.getRequestURI();
+        this.httpMethod = exchange.getRequestMethod();
+        this.requestHeaders = exchange.getRequestHeaders();
         this.body = body;
     }
 
@@ -24,7 +29,11 @@ public class HttpRequestData {
         return httpMethod;
     }
 
-    public String getBody() {
+    public Headers getRequestHeaders() {
+        return requestHeaders;
+    }
+
+    public T getBody() {
         return body;
     }
 
